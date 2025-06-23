@@ -50,16 +50,18 @@ Follow these steps to run the project locally:
 ### 3. Configure Environment Variables.
 ### 4. Run the application.
 
-## API Endpoints
+## 📡 API Endpoints
 ### 📕 Books
 
 `POST /books` – Add a new book  
 `GET /books` – List books (with filters)  
+
 **Query Parameters:**
 - `filter` — genre
 - `sortBy` — e.g. `createdAt`
 - `sort` — `asc` or `desc`
 - `limit` — number of items
+
 `GET /books/:bookId` – Get a book by ID  
 `PUT /books/:bookId` – Update a book  
 `DELETE /books/:bookId` – Remove a book
