@@ -8,6 +8,7 @@ This is a backend project for managing books and borrowing operations in a libra
 
 - ✅ CRUD operations for Books
 - ✅ Borrow system with availability check
+- ✅ Use of Mongoose middleware (pre, post)
 - ✅ Aggregated summary of borrowed books
 - ✅ Schema validation and centralized error handling
 - ✅ Type safety with TypeScript
