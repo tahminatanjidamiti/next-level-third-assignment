@@ -32,5 +32,14 @@ bookSchema.methods.updateAvailability = function () {
         yield this.save();
     });
 };
+bookSchema.pre("save", function (next) {
+    if (this.title) {
+        this.title = this.title.trim().replace(/\s+/g, " ");
+    }
+    if (this.author) {
+        this.author = this.author.trim().replace(/\s+/g, " ");
+    }
+    next();
+});
 const Book = (0, mongoose_1.model)("Book", bookSchema);
 exports.default = Book;

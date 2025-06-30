@@ -10,8 +10,8 @@ const borrow_controller_1 = require("./app/controllers/borrow.controller");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use("/books", books_controller_1.booksRoutes);
-app.use("/borrow", borrow_controller_1.borrowRoutes);
+app.use("/api/books", books_controller_1.booksRoutes);
+app.use("/api/borrow", borrow_controller_1.borrowRoutes);
 app.get('/', (req, res) => {
     res.send('Welcome to Library Management App');
 });

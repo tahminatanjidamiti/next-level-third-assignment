@@ -54,8 +54,8 @@ Follow these steps to run the project locally:
 ## 📡 API Endpoints
 ### 📕 Books
 
-`POST /books` – Add a new book  
-`GET /books` – List books (with filters)  
+`POST /api/books` – Add a new book  
+`GET /api/books` – List books (with filters)  
 
 **Query Parameters:**
 - `filter` — genre
@@ -63,14 +63,14 @@ Follow these steps to run the project locally:
 - `sort` — `asc` or `desc`
 - `limit` — number of items
 
-`GET /books/:bookId` – Get a book by ID  
-`PUT /books/:bookId` – Update a book  
-`DELETE /books/:bookId` – Remove a book
+`GET /api/books/:bookId` – Get a book by ID  
+`PUT /api/books/:bookId` – Update a book  
+`DELETE /api/books/:bookId` – Remove a book
 
 ### 📗 Borrow
 
-`POST /borrow` – Borrow a book  
-`GET /borrow` – Get borrow summary
+`POST /api/borrow` – Borrow a book  
+`GET /api/borrow` – Get borrow summary
 
 ## 🧹 Code Quality
 - TypeScript interfaces for type safety.
