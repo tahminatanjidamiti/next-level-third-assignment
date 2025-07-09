@@ -1,3 +1,4 @@
+import { SortOrder } from "mongoose";
 import Book from "../models/books.model";
 import express, { Request, Response } from "express";
 
@@ -21,23 +22,53 @@ booksRoutes.post("/", async (req: Request, res: Response) => {
     });
   }
 });
+
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
-    const { filter, sortBy = "createdAt", sort = "desc", limit = "10" } = req.query;
+    const {
+      page = "1",
+      limit = "4",
+      sortBy = "createdAt", // default sort field
+      sort = "desc",
+      filter,
+    } = req.query;
+
+    const pageNumber = parseInt(page as string, 10);
+    const limitNumber = parseInt(limit as string, 10);
+    const skip = (pageNumber - 1) * limitNumber;
 
     const query: any = {};
-    if (filter) {
-      query.genre = filter;
-    }
 
-    const books = await Book.find(query)
-      .sort({ [sortBy as string]: sort === "asc" ? 1 : -1 })
-      .limit(parseInt(limit as string));
+    
+    if (filter) {
+      query.genre = { $regex: new RegExp(filter as string, "i") }; // case-insensitive
+    }
+    const sortOption: { [key: string]: SortOrder } = {
+  [sortBy as string]: sort === "asc" ? 1 : -1,
+};
+
+const [books, total] = await Promise.all([
+  Book.find(query)
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limitNumber),
+  Book.countDocuments(query),
+]);
+
+    
+
+    const totalPages = Math.ceil(total / limitNumber) || 1;
 
     res.json({
       success: true,
       message: "Books retrieved successfully",
       data: books,
+      meta: {
+        total,
+        page: pageNumber,
+        limit: limitNumber,
+        totalPages,
+      },
     });
   } catch (err) {
     res.status(500).json({

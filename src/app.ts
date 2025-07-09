@@ -1,13 +1,22 @@
 import dotenv from "dotenv";
 import express, { Application, Request, Response } from 'express';
-
 import { booksRoutes } from "./app/controllers/books.controller";
 import { borrowRoutes } from "./app/controllers/borrow.controller";
+import cors from 'cors';
+
 
 dotenv.config();
 
 const app: Application = express();
+
+//middleware
 app.use(express.json())
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://next-fourth-assignment-client.vercel.app']
+   })
+);
+
 app.use("/api/books", booksRoutes);
 app.use("/api/borrow", borrowRoutes);
 

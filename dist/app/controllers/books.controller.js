@@ -35,18 +35,36 @@ exports.booksRoutes.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
 }));
 exports.booksRoutes.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { filter, sortBy = "createdAt", sort = "desc", limit = "10" } = req.query;
+        const { page = "1", limit = "4", sortBy = "createdAt", // default sort field
+        sort = "desc", filter, } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        const skip = (pageNumber - 1) * limitNumber;
         const query = {};
         if (filter) {
-            query.genre = filter;
+            query.genre = { $regex: new RegExp(filter, "i") }; // case-insensitive
         }
-        const books = yield books_model_1.default.find(query)
-            .sort({ [sortBy]: sort === "asc" ? 1 : -1 })
-            .limit(parseInt(limit));
+        const sortOption = {
+            [sortBy]: sort === "asc" ? 1 : -1,
+        };
+        const [books, total] = yield Promise.all([
+            books_model_1.default.find(query)
+                .sort(sortOption)
+                .skip(skip)
+                .limit(limitNumber),
+            books_model_1.default.countDocuments(query),
+        ]);
+        const totalPages = Math.ceil(total / limitNumber) || 1;
         res.json({
             success: true,
             message: "Books retrieved successfully",
             data: books,
+            meta: {
+                total,
+                page: pageNumber,
+                limit: limitNumber,
+                totalPages,
+            },
         });
     }
     catch (err) {
